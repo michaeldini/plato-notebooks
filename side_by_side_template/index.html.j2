@@ -1,0 +1,56 @@
+{%- extends 'lab/index.html.j2' -%}
+
+{%- block body -%}
+<style>
+    .notebook {
+        display: flex;
+        flex-direction: column;
+    }
+    .page-row {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+    }
+    .cell {
+        flex: 1;
+        margin: 5px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="notebook">
+    {% for cell in nb.cells[1:] %}
+        {%- if loop.index % 3 == 1 -%}
+            <div class="page-row">
+        {%- endif -%}
+
+        <div class="cell">
+            {%- if cell.cell_type == 'markdown' -%}
+                <div class="markdown">{{ cell.source | safe }}</div>
+            {%- elif cell.cell_type == 'code' -%}
+                <div class="code">
+                    <pre>{{ cell.source | escape }}</pre>
+                </div>
+            {%- elif cell.cell_type == 'raw' -%}
+                <div class="raw">{{ cell.source | safe }}</div>
+            {%- endif -%}
+
+            {%- if cell.outputs %}
+                <div class="outputs">
+                    {% for output in cell.outputs %}
+                        {%- if output.output_type == 'display_data' and 'image/png' in output.data -%}
+                            <img src="data:image/png;base64,{{ output.data['image/png'] }}" />
+                        {%- endif -%}
+                    {% endfor %}
+                </div>
+            {%- endif %}
+        </div>
+
+        {%- if loop.index % 3 == 0 or loop.last -%}
+            </div>
+        {%- endif -%}
+    {% endfor %}
+</div>
+{%- endblock body -%}

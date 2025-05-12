@@ -1,0 +1,7 @@
+{
+    "base_template": "lab",
+    "mimetypes": {
+        "text/html": true,
+        "image/svg+xml": true
+    }
+}
