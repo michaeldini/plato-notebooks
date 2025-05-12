@@ -53,8 +53,11 @@ def run_notebook(notebook_path):
 # Used in the generated notebook
 def generate_image(text_title, prompt):
 
-    original_filename = os.path.abspath(f"../imgs/original/{text_title}/{prompt.replace(' ', '_')}.png")
-    compressed_filename = os.path.abspath(f"../imgs/compressed/{text_title}/{prompt.replace(' ', '_')}.png")
+    # Generate shortened filenames to a maximum of 200 characters
+    sanitized_prompt = prompt.replace(' ', '_')[:200]  # Limit the prompt part to 200 characters
+    original_filename = os.path.abspath(f"./imgs/original/{text_title}/{sanitized_prompt}.png")
+    compressed_filename = os.path.abspath(f"./imgs/compressed/{text_title}/{sanitized_prompt}.png")
+    
     # Create the directories if they don't exist
     os.makedirs(os.path.dirname(original_filename), exist_ok=True)
     os.makedirs(os.path.dirname(compressed_filename), exist_ok=True)

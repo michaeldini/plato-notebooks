@@ -20,6 +20,7 @@ import openai
 from loguru import logger
 import os
 from IPython.display import Image, display
+from PIL import Image as PILImage
 logger.remove()  # Remove the default handler that logs to stderr
 logger.add("plato_app.log", format="{{time}} {{level}} {{message}}", level="DEBUG", rotation="1 MB", compression="zip")
 openai.api_key = os.environ['OPENAI_API_KEY']

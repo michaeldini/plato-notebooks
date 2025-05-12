@@ -60,3 +60,7 @@ The output of this script is the creation of pickle files for each text.
 - templates
 - pypi
 - other image APIs
+
+## prompt notes
+
+- If you your own prompt is long and detailed already (multiple sentences) then you can simply write something like: My prompt has full detail so no need to add more: ... your prompt here ...

@@ -13,5 +13,6 @@ dependencies = [
     "nbconvert>=7.16.6",
     "nbformat>=5.10.4",
     "openai>=1.78.0",
+    "pillow>=11.2.1",
     "typer>=0.15.3",
 ]
