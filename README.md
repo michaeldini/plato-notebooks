@@ -25,7 +25,7 @@ python main.py title "Apology"
 python main.py titles
 ```
 
-Check out `example-Apology.ipynb` and `example-Apology.html` for an example notebook and html generated from the text "Apology" by Plato.
+Check out `example-Apology.ipynb` and `example-Apology.html` for an example notebook and html generated from the text "Apology" by Plato. (Note that the example notebook contains numbers to generate the images, but in practice you would not include these numbers and use a prompt instead.)
 
 ## Pipeline
 
