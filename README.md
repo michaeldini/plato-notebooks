@@ -12,13 +12,13 @@ Read and illustrate Plato's texts with AI-generated images.
 - Clone the repository
 - Install the required packages in your environment via `pip install -r requirements.txt`
 - [Add your OpenAi API key to the environment](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)
-- `python main.py <title>` command to generate a notebook for the text.
+- `python main.py title <title>` command to generate a notebook for the text.
 - `python main.py titles` command to list all available texts.
 
 ## Example
 
 ```bash
-python main.py "Apology"
+python main.py title "Apology"
 ```
 
 ```bash
