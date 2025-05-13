@@ -38,6 +38,7 @@ Check out `example-Apology.ipynb` and `example-Apology.html` for an example note
 
 ```bash
 jupyter nbconvert --to html --embed-images  --no-input --theme dark <notebook.ipynb>
+jupyter nbconvert --to html --TemplateExporter.extra_template_basedirs=. --template=side_by_side_template  --embed-images --no-input --theme dark <notebook.ipynb> 
 ```
 
 ### Details
@@ -57,9 +58,10 @@ The output of this script is the creation of pickle files for each text.
 - CLI
 - reduce image file size. two folders compressed and uncompressed.
 - add more texts
-- templates
 - pypi
 - other image APIs
+- turn parsing into functions
+- create metadata for each image to store the prompt.
 
 ## prompt notes
 

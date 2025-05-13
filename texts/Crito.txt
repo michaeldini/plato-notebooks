@@ -531,6 +531,8 @@ that anything more which you may say will be vain.  Yet speak, if you have
 anything to say.
 
 CRITO:  I have nothing to say, Socrates.
+
 SOCRATES:  Leave me then, Crito, to fulfil the will of God, and to follow
 whither he leads.
 
+CRITO: This is blank text to make parsing easier.

@@ -1,10 +1,12 @@
-{%- extends 'lab/index.html.j2' -%}
+{%- extends 'classic/base.html.j2' -%}
 
 {%- block body -%}
+<meta charset="UTF-8">
 <style>
     .notebook {
         display: flex;
         flex-direction: column;
+        border: None;
     }
     .page-row {
         display: flex;
@@ -15,8 +17,19 @@
         flex: 1;
         margin: 5px;
         padding: 10px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
+    }
+    .img {
+        max-width: 600px;
+    }
+    .markdown {
+        font-size: 16px;
+        line-height: 1.5;
+        min-width: 600px;
+    }
+    body {
+        margin: 0;
+        color: white;
+        background-color: black;
     }
 </style>
 
@@ -30,9 +43,7 @@
             {%- if cell.cell_type == 'markdown' -%}
                 <div class="markdown">{{ cell.source | safe }}</div>
             {%- elif cell.cell_type == 'code' -%}
-                <div class="code">
-                    <pre>{{ cell.source | escape }}</pre>
-                </div>
+                {# Skip code cells #}
             {%- elif cell.cell_type == 'raw' -%}
                 <div class="raw">{{ cell.source | safe }}</div>
             {%- endif -%}
@@ -41,7 +52,7 @@
                 <div class="outputs">
                     {% for output in cell.outputs %}
                         {%- if output.output_type == 'display_data' and 'image/png' in output.data -%}
-                            <img src="data:image/png;base64,{{ output.data['image/png'] }}" />
+                            <img class=img src="data:image/png;base64,{{ output.data['image/png'] }}" />
                         {%- endif -%}
                     {% endfor %}
                 </div>
