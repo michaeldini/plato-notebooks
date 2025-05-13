@@ -1,19 +1,10 @@
 import typer
 from pathlib import Path
-from utils import run_notebook
 from generate_notebook import generate_notebook
 import utils
-from parsers import parse_euthyphro, parse_apology, parse_crito, parse_phaedo
+from parsers import TITLE_FUNCTION_MAP
 
 app = typer.Typer()
-
-# Map titles to their corresponding parsing functions
-TITLE_FUNCTION_MAP = {
-    "Euthyphro": parse_euthyphro,
-    "Apology": parse_apology,
-    "Crito": parse_crito,
-    "Phaedo": parse_phaedo,
-}
 
 @app.command(help="Accepts the title of a book from the user.")
 def title(title: str):
