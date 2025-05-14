@@ -103,7 +103,7 @@ def parse_crito(text_content):
     return [match[0].strip() for match in results]
 
 # Map titles to their corresponding parsing functions
-TITLE_FUNCTION_MAP = {
+TITLE_TO_PARSER_FUNCTION_MAP = {
     "Euthyphro": parse_euthyphro,
     "Apology": parse_apology,
     "Crito": parse_crito,
@@ -111,7 +111,7 @@ TITLE_FUNCTION_MAP = {
 }
 
 # Dynamically build TITLE_FUNCTION_MAP
-TITLE_FUNCTION_MAP = {
+TITLE_TO_PARSER_FUNCTION_MAP = {
     name.replace("parse_", "").capitalize(): func
     for name, func in globals().items()
     if callable(func) and name.startswith("parse_")

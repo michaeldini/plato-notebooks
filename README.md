@@ -41,24 +41,23 @@ jupyter nbconvert --to html --embed-images  --no-input --theme dark <notebook.ip
 jupyter nbconvert --to html --TemplateExporter.extra_template_basedirs=. --template=side_by_side_template  --embed-images --no-input --theme dark <notebook.ipynb> 
 ```
 
-### Details
+## Details
 
-`parse_texts.ipynb` is a script that parses the text files and generates a list of strings. The list is saved as a pickle file. The elements in the list are the paragraphs of the text, dialogue pairs, or whatever is appropriate. The list can be used to generate the notebook.
+### `title` command
 
-The file is a notebook because it useful to see the parsed text and iterate in a notebook when developing the correct parsing function. With the limited number of texts, it is not worth the effort to make it a more robust script. (FUTURE)
+When the user runs `python main.py title <title>`:
 
-The output of this script is the creation of pickle files for each text.
-
-`inspect.ipynb` is a script that loads the pickle files for inspection.
+1. The script checks if the title has a parsing function. Failure to do so will result in an error.
+2. The text is parsed and saved as a pickle file.
+3. Generates Notebook
 
 ## Future
 
-- it might be better to store each notebook and its images in their own folder. This would make it easier to manage the images and notebooks. It would also make it easier to share the notebooks with others.
-- could add more texts and use requests to download them from project gutenberg. there is a library to connect with project gutenberg, but investigate if it is worth the effort.
+- create metadata for each image to store the prompt.
 - pypi package for easy install and sharing (may need to work on environment for easier sharing)
 - add other image APIs (huggingface, stable diffusion, etc.)
-- create metadata for each image to store the prompt.
--create a character and inpaint it.
+- could add more texts and use requests to download them from project gutenberg. there is a library to connect with project gutenberg, but investigate if it is worth the effort.
+- create a character and inpaint it.
 
 ## prompt notes
 

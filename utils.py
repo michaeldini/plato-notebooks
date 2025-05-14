@@ -51,7 +51,13 @@ def run_notebook(notebook_path):
     ep.preprocess(notebook, {'metadata': {'path': './'}})
     
 
+class Illustrator:
+    def __init__(self, text_title):
+        self.text_title = text_title
 
+    def __call__(self, prompt):
+        return generate_image(self.text_title, prompt)
+    
 # Used in the generated notebook
 def generate_image(text_title, prompt):
 

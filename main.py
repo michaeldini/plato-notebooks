@@ -1,8 +1,7 @@
 import typer
-from pathlib import Path
 from generate_notebook import generate_notebook
 import utils
-from parsers import TITLE_FUNCTION_MAP
+from parsers import TITLE_TO_PARSER_FUNCTION_MAP
 
 app = typer.Typer()
 
@@ -16,16 +15,16 @@ def title(title: str):
     Returns:
         None
     """
-    if title not in TITLE_FUNCTION_MAP:
+    if title not in TITLE_TO_PARSER_FUNCTION_MAP:
         typer.echo(f"Error: '{title}' is not a valid title. Use the 'titles' command to see available options.")
         raise typer.Exit(code=1)
 
     typer.echo(f"The title of the book is: {title}")
 
     typer.echo("Parsing the selected text...")
-    TITLE_FUNCTION_MAP[title]()
+    TITLE_TO_PARSER_FUNCTION_MAP[title]()
 
-    typer.echo(f"Success! The text for '{title}' has been parsed and saved. 🚀")
+    typer.echo(f"Success! The text for '{title}' has been parsed.")
 
     typer.echo("Generating notebook...")
     generate_notebook(title)
