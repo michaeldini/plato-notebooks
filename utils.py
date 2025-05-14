@@ -5,14 +5,9 @@ import os
 from IPython.display import Image, display
 import dill
 from pathlib import Path
-import nbformat
 import hashlib
 import json
-
 from PIL import Image as PILImage
-from nbconvert.preprocessors import ExecutePreprocessor
-
- # Jacques-Louis David’s 1787 painting The Death of Socrates is a masterpiece of Neoclassical art, renowned for its emotional intensity, philosophical symbolism, and technical precision. It captures a pivotal moment from ancient history—the execution of the philosopher Socrates—rendered through the lens of Enlightenment ideals and Classical aesthetics.
 
 TITLES = {
     "Euthyphro": {"text": "texts/euthyphro.txt", "pickle": "pickles/euthyphro.pkl"},
@@ -29,30 +24,12 @@ client = openai.OpenAI()
 logger.remove()  # Remove the default handler that logs to stderr
 logger.add("plato_app.log", format="{{time}} {{level}} {{message}}", level="DEBUG", rotation="1 MB", compression="zip")
 
-# Used in parsing the text
-def create_dialogue_entry(text1, text2):
-    if not text1 or not text2:
-        raise ValueError("Both text1 and text2 must be provided.")
-    return f"{text1.strip()}\n{text2.strip()}"
-
-
 def load_plato(title):
     if title not in TITLES:
         raise ValueError(f"Invalid title. Please choose from {list(TITLES.keys())}.")
     with open(TITLES[title]["pickle"], "rb") as f:
         return dill.load(f)
 
-# Used to run the parsing notebook ( no longer used )
-def run_notebook(notebook_path):
-    with open(notebook_path) as f:
-        notebook = nbformat.read(f, as_version=4)
-    
-    # Configure the notebook execution
-    ep = ExecutePreprocessor(timeout=600, kernel_name='python3')
-    
-    # Execute the notebook
-    ep.preprocess(notebook, {'metadata': {'path': './'}})
-    
 
 class Illustrator:
     

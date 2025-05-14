@@ -53,7 +53,7 @@ When the user runs `python main.py title <title>`:
 
 ## Future
 
-- create metadata for each image to store the prompt.
+- add a pre-prompt option to include a pre-prompt to the image generation function. This would be useful for adding a specific style or theme to the images generated.
 - pypi package for easy install and sharing (may need to work on environment for easier sharing)
 - add other image APIs (huggingface, stable diffusion, etc.)
 - could add more texts and use requests to download them from project gutenberg. there is a library to connect with project gutenberg, but investigate if it is worth the effort.

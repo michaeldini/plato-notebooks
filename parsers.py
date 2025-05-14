@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 import dill
-from utils import create_dialogue_entry, TITLES
+from utils import  TITLES
 
 Path("pickles").mkdir(exist_ok=True)
 
@@ -61,7 +61,7 @@ def parse_phaedo(text_content):
         
         # Capture the ECHECRATES-PHAEDO pairs
         if text.startswith("ECHECRATES:") and (i + 1 < len(text_content) and text_content[i + 1].startswith("PHAEDO:")):
-            dialogue_pairs.append(create_dialogue_entry(text, text_content[i + 1]))
+            dialogue_pairs.append(f"{text.strip()}\n{text_content[i+1].strip()}")
         
         elif text.startswith("PHAEDO:"):
             # this line is captured by the previous if statement, so we can skip it
@@ -71,7 +71,6 @@ def parse_phaedo(text_content):
             # If the line more than 140 characters, add it as its own entry
             if len(text) > 140:
                 dialogue_pairs.append(text)
-                
             # If the line is less than 140 characters, append it to the last entry
             elif len(text) < 140 and dialogue_pairs:
                 dialogue_pairs[-1] += " " + text
