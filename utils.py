@@ -6,10 +6,13 @@ from IPython.display import Image, display
 import dill
 from pathlib import Path
 import nbformat
+import hashlib
+import json
 
 from PIL import Image as PILImage
 from nbconvert.preprocessors import ExecutePreprocessor
 
+ # Jacques-Louis David’s 1787 painting The Death of Socrates is a masterpiece of Neoclassical art, renowned for its emotional intensity, philosophical symbolism, and technical precision. It captures a pivotal moment from ancient history—the execution of the philosopher Socrates—rendered through the lens of Enlightenment ideals and Classical aesthetics.
 
 TITLES = {
     "Euthyphro": {"text": "texts/euthyphro.txt", "pickle": "pickles/euthyphro.pkl"},
@@ -18,7 +21,7 @@ TITLES = {
     "Phaedo": {"text": "texts/phaedo.txt", "pickle": "pickles/phaedo.pkl"},
 }
 
-
+# i think this is here for type hinting
 openai.api_key = os.environ['OPENAI_API_KEY']
 client = openai.OpenAI()
 
@@ -39,7 +42,7 @@ def load_plato(title):
     with open(TITLES[title]["pickle"], "rb") as f:
         return dill.load(f)
 
-# Used to run the parsing notebook
+# Used to run the parsing notebook ( no longer used )
 def run_notebook(notebook_path):
     with open(notebook_path) as f:
         notebook = nbformat.read(f, as_version=4)
@@ -52,48 +55,70 @@ def run_notebook(notebook_path):
     
 
 class Illustrator:
-    def __init__(self, text_title):
-        self.text_title = text_title
-
-    def __call__(self, prompt):
-        return generate_image(self.text_title, prompt)
     
-# Used in the generated notebook
-def generate_image(text_title, prompt):
-
-    # Generate shortened filenames to a maximum of 200 characters
-    sanitized_prompt = prompt.replace(' ', '_')[:200]  # Limit the prompt part to 200 characters
-    original_filename = Path(f"./imgs/original/{text_title}/{sanitized_prompt}.png")
-    compressed_filename = Path(f"./imgs/compressed/{text_title}/{sanitized_prompt}.jpg")
+    # Define the directories for original and compressed images
+    original_img_dir = Path("imgs/original")
+    compressed_img_dir = Path("imgs/compressed")
+    prompt_map_file = Path("imgs/prompt_map.json")  # File to store the map between filenames and prompts
 
     # Create the directories if they don't exist
-    original_filename.parent.mkdir(parents=True, exist_ok=True)
-    compressed_filename.parent.mkdir(parents=True, exist_ok=True)
+    original_img_dir.mkdir(parents=True, exist_ok=True)
+    compressed_img_dir.mkdir(parents=True, exist_ok=True)
+    prompt_map_file.touch(exist_ok=True)  # Create the file if it doesn't exist
 
-    # Check if the compressed file already exists
-    if compressed_filename.exists():
-        logger.info(f"File '{compressed_filename}' already exists. Skipping image generation.")
-        return compressed_filename
-    elif prompt.strip() == "":
-        return None
-    elif original_filename.exists() and not compressed_filename.exists():
-        logger.info(f"File '{original_filename}' already exists. Compressing image.")
-        return compress_image(original_filename, compressed_filename)
-    else:
-        logger.info(f"Generating image for prompt: {prompt}")
-        # Generate the image using OpenAI's DALL-E
-        img = client.images.generate(
-            model="dall-e-3",
-            prompt=f"{prompt}",
-            n=1,
-            size="1024x1024",
-            response_format="b64_json",
-        )
-        image_bytes = base64.b64decode(img.data[0].b64_json)
-        with open(original_filename, "wb") as f:
-            f.write(image_bytes)
-            
-        return compress_image(original_filename, compressed_filename)
+    def __init__(self):
+        # Load the prompt map from file
+        try:
+            with open(self.prompt_map_file, "r") as f:
+                self.prompt_map = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            self.prompt_map = {}
+
+    def __call__(self, prompt):
+        return self.generate_image(prompt)
+        
+    # Used in the generated notebook
+    def generate_image(self, prompt):
+        # Generate a hash from the prompt for the filename
+        prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()
+        original_filename = Illustrator.original_img_dir / f"{prompt_hash}.png"
+        compressed_filename = Illustrator.compressed_img_dir / f"{prompt_hash}.jpg"
+
+        # Save the mapping between the hash and the prompt
+        if prompt_hash not in self.prompt_map:
+            self.prompt_map[prompt_hash] = prompt
+            self._save_prompt_map()
+
+        # Check if the compressed file already exists
+        if compressed_filename.exists():
+            logger.info(f"File '{compressed_filename}' already exists. Skipping image generation.")
+            return compressed_filename
+        elif prompt.strip() == "":
+            return None # No prompt provided
+        elif original_filename.exists() and not compressed_filename.exists():
+            logger.info(f"File '{original_filename}' already exists.  Skipping image generation. Compressing image.")
+            return compress_image(original_filename, compressed_filename)
+        else:
+            logger.info(f"Generating image for prompt: {prompt}")
+            # Generate the image using OpenAI's DALL-E
+            img = client.images.generate(
+                model="dall-e-3",
+                prompt=f"{prompt}",
+                n=1,
+                size="1024x1024",
+                response_format="b64_json",
+            )
+           
+            image_bytes = base64.b64decode(img.data[0].b64_json)
+            with open(original_filename, "wb") as f:
+                f.write(image_bytes)
+                
+            return compress_image(original_filename, compressed_filename)
+
+    def _save_prompt_map(self):
+        """Save the prompt map to a file."""
+        with open(self.prompt_map_file, "w") as f:
+            json.dump(self.prompt_map, f, indent=4)
 
 def compress_image(original_filename, compressed_filename):
     # Check if the original file exists

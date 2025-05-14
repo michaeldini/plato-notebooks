@@ -2,7 +2,7 @@ from inspect import getsource
 from pathlib import Path
 from loguru import logger
 import nbformat as nbf
-from utils import load_plato, generate_image, display_image, compress_image, Illustrator
+from utils import load_plato,  display_image, compress_image, Illustrator
 
 def generate_notebook(text_title):
 
@@ -21,13 +21,15 @@ def generate_notebook(text_title):
 
     # convert the functions used in the notebook to strings
     # this way we can create the funcs outside the import string
-    generate_image_code = getsource(generate_image)
     display_image_code = getsource(display_image)
     compress_image_code = getsource(compress_image)
     illustrator_code = getsource(Illustrator)
     
     # import utils and define the title
     notebook.cells.append(nbf.v4.new_code_cell(f"""
+import json
+import hashlib
+
 import base64
 import openai
 from loguru import logger
@@ -42,8 +44,6 @@ logger.add("{text_title}.log", format="{{time}} {{level}} {{message}}", level="D
 openai.api_key = os.environ['OPENAI_API_KEY']
 
 {illustrator_code}
-
-{generate_image_code}
 
 {display_image_code}
 
