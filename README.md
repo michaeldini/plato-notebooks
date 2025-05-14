@@ -5,7 +5,7 @@ Read and illustrate Plato's texts with AI-generated images.
 ## Features
 
 - Auto-generate jupyter notebooks of Plato texts.
-- Notebooks feature the text and functions to generate an Ai image representing the text.
+- Notebooks feature the text and functions to generate an Ai image based on the user's prompt to illustrate the text.
 
 ## Usage
 
@@ -53,16 +53,14 @@ The output of this script is the creation of pickle files for each text.
 
 ## Future
 
--move generated_imge func to utils.py
-
-- CLI
-- reduce image file size. two folders compressed and uncompressed.
-- add more texts
-- pypi
-- other image APIs
-- turn parsing into functions
+- it might be better to store each notebook and its images in their own folder. This would make it easier to manage the images and notebooks. It would also make it easier to share the notebooks with others.
+- could add more texts and use requests to download them from project gutenberg. there is a library to connect with project gutenberg, but investigate if it is worth the effort.
+- pypi package for easy install and sharing (may need to work on environment for easier sharing)
+- add other image APIs (huggingface, stable diffusion, etc.)
 - create metadata for each image to store the prompt.
+-create a character and inpaint it.
 
 ## prompt notes
 
-- If you your own prompt is long and detailed already (multiple sentences) then you can simply write something like: My prompt has full detail so no need to add more: ... your prompt here ...
+- If you your own prompt is long and detailed already (multiple sentences) then you can simply write something like:
+        My prompt has full detail so no need to add more: ... your prompt here ...

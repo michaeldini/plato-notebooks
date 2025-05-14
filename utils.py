@@ -4,8 +4,10 @@ from loguru import logger
 import os
 from IPython.display import Image, display
 import dill
-
+from pathlib import Path
 import nbformat
+
+from PIL import Image as PILImage
 from nbconvert.preprocessors import ExecutePreprocessor
 
 
@@ -55,20 +57,20 @@ def generate_image(text_title, prompt):
 
     # Generate shortened filenames to a maximum of 200 characters
     sanitized_prompt = prompt.replace(' ', '_')[:200]  # Limit the prompt part to 200 characters
-    original_filename = os.path.abspath(f"./imgs/original/{text_title}/{sanitized_prompt}.png")
-    compressed_filename = os.path.abspath(f"./imgs/compressed/{text_title}/{sanitized_prompt}.png")
-    
+    original_filename = Path(f"./imgs/original/{text_title}/{sanitized_prompt}.png")
+    compressed_filename = Path(f"./imgs/compressed/{text_title}/{sanitized_prompt}.jpg")
+
     # Create the directories if they don't exist
-    os.makedirs(os.path.dirname(original_filename), exist_ok=True)
-    os.makedirs(os.path.dirname(compressed_filename), exist_ok=True)
-    
+    original_filename.parent.mkdir(parents=True, exist_ok=True)
+    compressed_filename.parent.mkdir(parents=True, exist_ok=True)
+
     # Check if the compressed file already exists
-    if os.path.exists(compressed_filename):
+    if compressed_filename.exists():
         logger.info(f"File '{compressed_filename}' already exists. Skipping image generation.")
         return compressed_filename
     elif prompt.strip() == "":
         return None
-    elif os.path.exists(original_filename) and not os.path.exists(compressed_filename):
+    elif original_filename.exists() and not compressed_filename.exists():
         logger.info(f"File '{original_filename}' already exists. Compressing image.")
         return compress_image(original_filename, compressed_filename)
     else:
@@ -76,7 +78,7 @@ def generate_image(text_title, prompt):
         # Generate the image using OpenAI's DALL-E
         img = client.images.generate(
             model="dall-e-3",
-            prompt=f"cartoon style, the setting is ancient greece, the scene is: {prompt}",
+            prompt=f"{prompt}",
             n=1,
             size="1024x1024",
             response_format="b64_json",
@@ -93,9 +95,6 @@ def compress_image(original_filename, compressed_filename):
         logger.error(f"Original file '{original_filename}' does not exist.")
         raise FileNotFoundError(f"Original file '{original_filename}' does not exist.")
 
-    # Compress the image using PIL
-    from PIL import Image as PILImage
-
     with PILImage.open(original_filename) as img:
         img.save(compressed_filename, "JPEG", quality=85, optimize=True)
 
@@ -110,3 +109,4 @@ def display_image(filename):
     else:
         # Display the image
         display(Image(filename, width=400, height=400))
+

@@ -28,9 +28,7 @@ def title(title: str):
     typer.echo(f"Success! The text for '{title}' has been parsed and saved. 🚀")
 
     typer.echo("Generating notebook...")
-    notebook_path = Path('notebooks')
-    notebook_path.mkdir(parents=True, exist_ok=True)
-    generate_notebook(title, notebook_path / f'{title}_auto-generated.ipynb')
+    generate_notebook(title)
     
     typer.echo("Success! The notebook has been generated. 🚀")
 
