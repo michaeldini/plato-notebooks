@@ -38,7 +38,7 @@ Check out `example-Apology.ipynb` and `example-Apology.html` for an example note
 
 ```bash
 jupyter nbconvert --to html --embed-images  --no-input --theme dark <notebook.ipynb>
-jupyter nbconvert --to html --TemplateExporter.extra_template_basedirs=. --template=side_by_side_template  --embed-images --no-input --theme dark <notebook.ipynb> 
+jupyter nbconvert --to html --TemplateExporter.extra_template_basedirs=. --template=templates  --embed-images --no-input --theme dark <notebook.ipynb> 
 ```
 
 ## Details
