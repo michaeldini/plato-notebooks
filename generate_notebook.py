@@ -50,7 +50,7 @@ openai.api_key = os.environ['OPENAI_API_KEY']
 {compress_image_code}
 
 client = openai.OpenAI()
-illustrator = Illustrator('{text_title}')
+illustrator = Illustrator()
 """))
 
     # Iterate through the list and add Markdown and Code cells
